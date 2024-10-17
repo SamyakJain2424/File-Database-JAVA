@@ -1,24 +1,28 @@
 package com.example.demo.service;
 
-import org.springframework.stereotype.Service;
+import com.example.demo.table.Column;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FileDatabaseService {
     private static final String METADATA_FILE = "metadata.txt";
     private static final String DATA_FILE = "table_data.txt";
 
-    public void createTable(String tableDefinition) throws IOException {
-        // Write metadata (column names and types) to the metadata file
-        System.out.println("-------------------------------");
-        System.out.println(tableDefinition);
+    public void createTable(String tableName, List<Column> columns) throws IOException {
+        // Write metadata to the file in a structured plain text format
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(METADATA_FILE))) {
-
-            writer.write(tableDefinition);
+            writer.write("Table Name: " + tableName);
+            writer.newLine();
+            for (Column column : columns) {
+                writer.write("Column: " + column.getName() + ", Type: " + column.getType());
+                writer.newLine();
+            }
         }
     }
 
@@ -34,4 +38,5 @@ public class FileDatabaseService {
         File file = new File(METADATA_FILE);
         return file.exists();
     }
+
 }
