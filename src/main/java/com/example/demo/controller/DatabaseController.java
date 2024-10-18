@@ -16,12 +16,25 @@ public class DatabaseController {
     @Autowired
     private SQLParserService sqlParserService;
 
-    @PostMapping("/execute")
+    @PostMapping("/create")
     public ResponseEntity<String> executeSQL(@RequestBody String sql) {
         try {
             System.out.println("-------------Hello---------------");
-            sqlParserService.parseAndExecute(sql);
-            return ResponseEntity.ok("Database operation has been performed successfully");
+            System.out.println(sql);
+            sqlParserService.parseAndExecuteTable(sql);
+            return ResponseEntity.ok("Table has created successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/insert")
+    public ResponseEntity<String> executeSQL2(@RequestBody String sql) {
+        try {
+            System.out.println("-------------Hello---------------");
+            System.out.println(sql);
+            sqlParserService.parseAndExecuteData(sql);
+            return ResponseEntity.ok("Values has been inserted successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }

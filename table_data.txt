@@ -1,3 +1,0 @@
-(id, name) VALUES (1, 'John Doe')
-(id, name) VALUES (2, 'KP')
-(id, name) VALUES (2, 'KP')
