@@ -64,6 +64,7 @@ public class DatabaseController {
     public ResponseEntity<List<TableData>>  grtTableData() throws IOException {
         logger.info("Received request for getting the data");
         List<TableData> data = tableService.getData();
+        redisCounterService.incrementSuccess();
         logger.info("Data retrieved successfully");
         return ResponseEntity.ok(data);
     }

@@ -33,6 +33,10 @@ public class TableUtils {
 
     public List<String> parseInsertColumns(String sql) {
         String columnPart = sql.substring(sql.indexOf("(") + 1, sql.indexOf(")"));
+        if(columnPart.endsWith(","))
+        {
+            throw new IllegalArgumentException("Unexpected token \",\" found");
+        }
         String[] columnArray = columnPart.split(",");
         List<String> columns = new ArrayList<>();
         for (String column : columnArray) {
@@ -43,6 +47,12 @@ public class TableUtils {
 
     public List<String> parseValues(String sql) {
         String valuesPart = sql.substring(sql.lastIndexOf("(") + 1, sql.lastIndexOf(")"));
+
+        if(valuesPart.endsWith(","))
+        {
+            throw new IllegalArgumentException("Unexpected token \",\" found");
+        }
+
         String[] valuesArray = valuesPart.split(",");
         List<String> values = new ArrayList<>();
         for (String value : valuesArray) {
