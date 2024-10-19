@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +14,16 @@ import com.example.demo.service.SQLParserService;
 @RequestMapping("/api")
 public class DatabaseController {
 
+
     @Autowired
-    private SQLParserService sqlParserService;
+    private TableService tableService;
 
     @PostMapping("/create")
     public ResponseEntity<String> executeSQL(@RequestBody String sql) {
         try {
             System.out.println("-------------Hello---------------");
             System.out.println(sql);
-            sqlParserService.parseAndExecuteTable(sql);
+            tableService.createTable(sql);
             return ResponseEntity.ok("Table has created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
@@ -33,7 +35,7 @@ public class DatabaseController {
         try {
             System.out.println("-------------Hello---------------");
             System.out.println(sql);
-            sqlParserService.parseAndExecuteData(sql);
+            tableService.insertData(sql);
             return ResponseEntity.ok("Values has been inserted successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());

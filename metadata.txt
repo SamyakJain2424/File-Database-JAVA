@@ -1,0 +1,4 @@
+Table Name: A1
+Column: ID, Type: INTEGER
+Column: NAME, Type: STRING
+Column: ROLLNO, Type: INTEGER
