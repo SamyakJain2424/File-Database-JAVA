@@ -58,20 +58,15 @@ public class TableRepository {
     }
 
     public void saveData(TableData data) throws IOException {
-        // Retrieve the metadata to validate the columns
         TableMetadata metadata = readMetadata();
         List<Column> columns = metadata.getColumns();
 
-        // Validate that the data columns match the metadata columns
         String TableNameFromData = data.getTableName();
         if(!TableNameFromData.equals(metadata.getTableName()))
         {
             throw new IllegalArgumentException("Table name does not match the actual table name in the database");
         }
 
-
-
-        // Save data if valid
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE, true))) {
             for (Map.Entry<String, String> entry : data.getRowData().entrySet()) {
                 writer.write(entry.getKey() + ": " + entry.getValue() + ", ");
@@ -105,9 +100,6 @@ public class TableRepository {
         }
         return rows;
     }
-
-
-
 
     private void clearDataFile() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE))) {
