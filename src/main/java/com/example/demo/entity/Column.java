@@ -15,7 +15,7 @@ public class Column {
 
     public Column(String name, String type) {
         this.name = name;
-        setType(type); // Using the custom setter for validation
+        setType(type);
     }
 
     public void setType(String type) {

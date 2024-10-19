@@ -13,6 +13,5 @@ import java.util.Map;
 @Setter
 public class TableData {
 
-    private String TableName;
     private Map<String, String> rowData;
 }

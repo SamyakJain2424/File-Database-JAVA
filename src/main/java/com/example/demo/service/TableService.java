@@ -23,7 +23,6 @@ public class TableService {
 
     public void createTable(String sql) throws IOException {
         if (sql.toUpperCase().startsWith("CREATE TABLE")) {
-            // Use the utility function from TableUtils
             String tableName = tableUtils.parseTableName(sql);
             List<Column> columns = tableUtils.parseColumns(sql);
             TableMetadata metadata = new TableMetadata(tableName, columns);
@@ -45,6 +44,12 @@ public class TableService {
             }
 
             TableMetadata metadata = tableRepository.readMetadata();
+
+            if(!tableName.equals(metadata.getTableName()))
+            {
+                throw new IllegalArgumentException("Table name does not match the actual table name in the database");
+            }
+
             List<Column> tableColumns = metadata.getColumns();
 
             tableUtils.validateInsertColumns(tableColumns, insertColumns);
@@ -59,7 +64,7 @@ public class TableService {
                 rowData.put(columnName, value);
             }
 
-            TableData tableData = new TableData(tableName, rowData);
+            TableData tableData = new TableData(rowData);
             tableRepository.saveData(tableData);
 
         } else {

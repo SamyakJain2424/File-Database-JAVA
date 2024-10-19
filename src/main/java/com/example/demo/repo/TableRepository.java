@@ -61,12 +61,6 @@ public class TableRepository {
         TableMetadata metadata = readMetadata();
         List<Column> columns = metadata.getColumns();
 
-        String TableNameFromData = data.getTableName();
-        if(!TableNameFromData.equals(metadata.getTableName()))
-        {
-            throw new IllegalArgumentException("Table name does not match the actual table name in the database");
-        }
-
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE, true))) {
             for (Map.Entry<String, String> entry : data.getRowData().entrySet()) {
                 writer.write(entry.getKey() + ": " + entry.getValue() + ", ");
@@ -92,10 +86,15 @@ public class TableRepository {
                 for (String entry : entries) {
                     if (!entry.trim().isEmpty()) {
                         String[] keyValue = entry.split(":");
-                        rowData.put(keyValue[0].trim(), keyValue[1].trim());
+                        String colVal = keyValue[1].trim();
+                        if(colVal.startsWith("\""))
+                        {
+                            colVal = colVal.substring(1,colVal.length()-1);
+                        }
+                        rowData.put(keyValue[0].trim(), colVal);
                     }
                 }
-                rows.add(new TableData(TableName, rowData));
+                rows.add(new TableData(rowData));
             }
         }
         return rows;
@@ -103,7 +102,7 @@ public class TableRepository {
 
     private void clearDataFile() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE))) {
-            writer.write(""); // Clear the file
+            writer.write("");
         }
     }
 }
