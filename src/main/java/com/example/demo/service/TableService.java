@@ -36,7 +36,9 @@ public class TableService {
             List<String> insertColumns = parseInsertColumns(sql);
             List<String> values = parseValues(sql);
 
-
+            if(insertColumns.size()!=values.size()){
+                throw new IllegalArgumentException("Number of columns and inserted values do not match");
+            }
 
             TableMetadata metadata = tableRepository.readMetadata();
             List<Column> tableColumns = metadata.getColumns();
@@ -112,18 +114,26 @@ public class TableService {
     }
 
     private void validateInsertColumns(List<Column> metadataColumns, List<String> insertColumns) {
+
         Set<String> validColumnNames = metadataColumns.stream()
                 .map(Column::getName)
                 .collect(Collectors.toSet());
 
-        // Check each key in rowData
+        // Check for duplicates in insertColumns
+        Set<String> uniqueColumns = new HashSet<>();
         for (String col : insertColumns) {
             if (!validColumnNames.contains(col)) {
                 throw new IllegalArgumentException("Invalid column name: " + col +
                         ". Allowed column names are: " + validColumnNames);
             }
+
+            // Check if column is already in uniqueColumns set (i.e., duplicate)
+            if (!uniqueColumns.add(col)) {
+                throw new IllegalArgumentException("Duplicate column name detected: " + col);
+            }
         }
     }
+
 
 
     private List<String> reorderValuesWithDefaults(List<String> insertColumns, List<String> values, List<Column> tableColumns) {
