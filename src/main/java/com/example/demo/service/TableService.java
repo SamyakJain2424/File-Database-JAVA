@@ -67,4 +67,11 @@ public class TableService {
         }
     }
 
+    public List<TableData> getData() throws IOException {
+
+        List<TableData> data = tableRepository.readData();
+
+        return data;
+    }
+
 }
